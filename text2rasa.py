@@ -18,7 +18,6 @@ class Text2Rasa:
     self.spacy_doc = nlp(self.text)
 
   def read_training_file(self):
-    #TODO error handling
     try:
       with open(self.json_file) as training_data_file:
         training_data = training_data_file.read()
@@ -30,9 +29,12 @@ class Text2Rasa:
     
   def write_training_file(self):
     #TODO error handling
-    with open(self.json_file, "w") as training_data_file:
-      training_data_file.write(json.dumps(self.parsed_json, 
-                                          indent=4, separators=(',', ': ')))
+    try:
+      with open(self.json_file, "w") as training_data_file:
+        training_data_file.write(json.dumps(self.parsed_json, 
+                                            indent=4, separators=(',', ': ')))
+    except IOError:
+      print "File " + self.json_file + ""
 
   def noun_chunks_to_json(self):
     for np in self.spacy_doc.noun_chunks:
